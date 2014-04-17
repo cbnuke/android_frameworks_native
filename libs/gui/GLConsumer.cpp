@@ -153,8 +153,7 @@ GLConsumer::GLConsumer(const sp<IGraphicBufferConsumer>& bq, uint32_t tex,
     if (hw_get_module(COPYBIT_HARDWARE_MODULE_ID, &module) == 0) {
         copybit_open(module, &mBlitEngine);
     }
-    ALOGE_IF(!mBlitEngine, "GLConsumer: cannot open copybit engine", mBlitEngin
-e);
+    ALOGE_IF(!mBlitEngine, "GLConsumer: cannot open copybit engine", mBlitEngine);
 
     sp<ISurfaceComposer> composer(ComposerService::getComposerService());
     mGraphicBufferAlloc = composer->createGraphicBufferAlloc();

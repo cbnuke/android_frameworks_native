@@ -155,21 +155,7 @@ ssize_t bytesPerPixel(PixelFormat format) {
         case PIXEL_FORMAT_RGB_565:
         case PIXEL_FORMAT_RGBA_5551:
         case PIXEL_FORMAT_RGBA_4444:
-#ifdef STE_HARDWARE
-        case HAL_PIXEL_FORMAT_YCrCb_422_SP:
-        case HAL_PIXEL_FORMAT_YCbCr_422_P:
-        case HAL_PIXEL_FORMAT_YCrCb_422_P:
-        case HAL_PIXEL_FORMAT_CbYCrY_422_I:
-        case HAL_PIXEL_FORMAT_YCbCr_420_SP:
-        case HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED:
-        case HAL_PIXEL_FORMAT_YCrCb_420_SP_TILED:
-        case HAL_PIXEL_FORMAT_YCbCr_420_P:
-        case HAL_PIXEL_FORMAT_YCrCb_420_P:
-        case HAL_PIXEL_FORMAT_YCbCr_420_I:
-        case HAL_PIXEL_FORMAT_CbYCrY_420_I:
-        case HAL_PIXEL_FORMAT_YCBCR42XMBN:
-#endif
-	    return 1;
+            return 2;
     }
     return BAD_VALUE;
 }
@@ -185,24 +171,7 @@ ssize_t bitsPerPixel(PixelFormat format) {
         case PIXEL_FORMAT_RGB_565:
         case PIXEL_FORMAT_RGBA_5551:
         case PIXEL_FORMAT_RGBA_4444:
-#ifdef STE_HARDWARE
-	case HAL_PIXEL_FORMAT_YCrCb_422_SP:
-	case HAL_PIXEL_FORMAT_YCbCr_422_P:
-	case HAL_PIXEL_FORMAT_YCrCb_422_P:
-	case HAL_PIXEL_FORMAT_CbYCrY_422_I:
-#endif
             return 16;
-#ifdef STE_HARDWARE
-	case HAL_PIXEL_FORMAT_YCbCr_420_SP:
-	case HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED:
-	case HAL_PIXEL_FORMAT_YCrCb_420_SP_TILED:
-	case HAL_PIXEL_FORMAT_YCbCr_420_P:
-	case HAL_PIXEL_FORMAT_YCrCb_420_P:
-	case HAL_PIXEL_FORMAT_YCbCr_420_I:
-	case HAL_PIXEL_FORMAT_CbYCrY_420_I:
-	case HAL_PIXEL_FORMAT_YCBCR42XMBN:
-#endif
-	    return 12;
     }
     return BAD_VALUE;
 }

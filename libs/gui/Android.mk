@@ -40,6 +40,12 @@ LOCAL_SHARED_LIBRARIES := \
 	libhardware \
 	liblog
 
+#ifdef STE_HARDWARE
+LOCAL_SHARED_LIBRARIES += \
+       libhardware \
+       libhardware_legacy
+#endif
+
 # Executed only on QCOM BSPs
 ifeq ($(TARGET_USES_QCOM_BSP),true)
 ifneq ($(TARGET_QCOM_DISPLAY_VARIANT),)

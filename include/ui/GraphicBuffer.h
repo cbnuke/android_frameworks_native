@@ -109,6 +109,9 @@ public:
     status_t lockYCbCr(uint32_t usage, const Rect& rect, android_ycbcr *ycbcr);
     status_t unlock();
 
+    status_t perform(buffer_handle_t handle, int operation, 
+            	     uint32_t w, uint32_t h, PixelFormat format); 
+
     ANativeWindowBuffer* getNativeBuffer() const;
 
     // for debugging
@@ -121,7 +124,7 @@ public:
     status_t unflatten(void const*& buffer, size_t& size, int const*& fds, size_t& count);
 
 private:
-    ~GraphicBuffer();
+    virtual ~GraphicBuffer();
 
     enum {
         ownNone   = 0,

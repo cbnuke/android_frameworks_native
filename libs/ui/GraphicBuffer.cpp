@@ -229,6 +229,13 @@ status_t GraphicBuffer::unlock()
     return res;
 }
 
+status_t GraphicBuffer::perform(buffer_handle_t hnd, int operation,
+                                uint32_t w, uint32_t h, PixelFormat format)	
+{	 	
+    return 0;	 	
+
+}
+
 size_t GraphicBuffer::getFlattenedSize() const {
     return (8 + (handle ? handle->numInts : 0))*sizeof(int);
 }

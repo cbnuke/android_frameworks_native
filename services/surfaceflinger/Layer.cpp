@@ -180,14 +180,6 @@ const String8& Layer::getName() const {
 status_t Layer::setBuffers( uint32_t w, uint32_t h,
                             PixelFormat format, uint32_t flags)
 {
-    // this surfaces pixel format
-    PixelFormatInfo info;
-    status_t err = getPixelFormatInfo(format, &info);
-    if (err) {
-        ALOGE("unsupported pixelformat %d", format);
-        return err;
-    }
-
     uint32_t const maxSurfaceDims = min(
             mFlinger->getMaxTextureSize(), mFlinger->getMaxViewportDims());
 
@@ -731,8 +723,6 @@ bool Layer::getOpacityForFormat(uint32_t format) {
     switch (format) {
         case HAL_PIXEL_FORMAT_RGBA_8888:
         case HAL_PIXEL_FORMAT_BGRA_8888:
-        case HAL_PIXEL_FORMAT_RGBA_5551:
-        case HAL_PIXEL_FORMAT_RGBA_4444:
         case HAL_PIXEL_FORMAT_sRGB_A_8888:
             return false;
     }

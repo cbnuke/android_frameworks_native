@@ -37,6 +37,21 @@
 namespace android {
 // ----------------------------------------------------------------------------
 
+/*
+ * Structure to hold the buffer geometry
+ */
+struct BufGeometry {
+    int mWidth;
+    int mHeight;
+    int mFormat;
+    BufGeometry(): mWidth(0), mHeight(0), mFormat(0) {}
+    void set(int w, int h, int f) {
+        mWidth = w;
+        mHeight = h;
+        mFormat = f;
+    }
+};
+
 class BufferQueue : public BnGraphicBufferProducer,
                     public BnGraphicBufferConsumer,
                     private IBinder::DeathRecipient {
@@ -217,6 +232,11 @@ public:
     // to calculate the size for the buffer. this will take effect from next
     // dequeue buffer.
     virtual status_t setBuffersSize(int size);
+
+    // update buffer width, height and format for a native buffer
+    // dynamically from the client which will take effect in the next
+    // queue buffer.
+    virtual status_t updateBuffersGeometry(int w, int h, int f);
 
     /*
      * IGraphicBufferConsumer interface
@@ -573,6 +593,9 @@ private:
 
     // mTransformHint is used to optimize for screen rotations
     uint32_t mTransformHint;
+
+    // holds the updated buffer geometry info of the new video resolution.
+   BufGeometry mNextBufferInfo;
 
     // mConnectedProducerToken is used to set a binder death notification on the producer
     sp<IBinder> mConnectedProducerToken;

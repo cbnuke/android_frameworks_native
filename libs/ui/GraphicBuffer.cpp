@@ -230,13 +230,6 @@ status_t GraphicBuffer::unlock()
 }
 
 status_t GraphicBuffer::perform(buffer_handle_t hnd, int operation,
-                                uint32_t w, uint32_t h, PixelFormat format)	
-{	 	
-    return 0;	 	
-
-}
-
-status_t GraphicBuffer::perform(buffer_handle_t hnd, int operation,
                                 uint32_t w, uint32_t h, PixelFormat format)
 {
     status_t res = getBufferMapper().perform(hnd,

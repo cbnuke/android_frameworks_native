@@ -39,12 +39,10 @@ LOCAL_SHARED_LIBRARIES := \
 	libutils \
 	liblog
 
-ifeq ($(BOARD_USES_STE_HARDWARE),true)
-LOCAL_CFLAGS += -DSTE_HARDWARE
-LOCAL_SHARED_LIBRARIES := \
+LOCAL_SHARED_LIBRARIES += \
        libhardware \
        libhardware_legacy
-endif
+
 
 # Executed only on QCOM BSPs
 ifeq ($(TARGET_USES_QCOM_BSP),true)

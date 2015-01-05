@@ -55,6 +55,12 @@ ifeq ($(BOARD_USE_MHEAP_SCREENSHOT),true)
     LOCAL_CFLAGS += -DUSE_MHEAP_SCREENSHOT
 endif
 
+ifeq ($(BOARD_USES_STE_HARDWARE), true)
+LOCAL_SHARED_LIBRARIES += \
+	libhardware \
+	libhardware_legacy
+endif
+
 LOCAL_MODULE:= libgui
 
 ifeq ($(TARGET_BOARD_PLATFORM), tegra)

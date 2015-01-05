@@ -86,10 +86,10 @@ EGL_ENTRY(EGLint, eglDupNativeFenceFDANDROID, EGLDisplay, EGLSyncKHR)
 EGL_ENTRY(EGLBoolean, eglGpuPerfHintQCOM, EGLDisplay, EGLContext, EGLint *)
 
 /* NVIDIA extensions */
-
+/*
 EGL_ENTRY(EGLuint64NV, eglGetSystemTimeFrequencyNV, void)
 EGL_ENTRY(EGLuint64NV, eglGetSystemTimeNV, void)
-
+*/
 /* IMG extensions */
 
 EGL_ENTRY(EGLBoolean, eglHibernateProcessIMG, void)

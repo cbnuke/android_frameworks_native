@@ -356,6 +356,9 @@ private:
     };
 
 #ifdef STE_HARDWARE
+    // returns TRUE if buffer needs color format conversion
+    bool conversionIsNeeded(const sp<GraphicBuffer>& graphicBuffer);
+    
     // converts buffer to a suitable color format
     status_t convert(sp<GraphicBuffer> &srcBuf, sp<GraphicBuffer> &dstBuf);
 #endif
@@ -515,7 +518,7 @@ private:
     // mBlitSlots stores the buffers that have been allocated int the case
     // of color transform. It is initialised to null pointer,s and gets
     // filled in with the result of GLConsumer::updateAndReleaseLocked
-    sp<GraphicBuffer> mBlitSlots[BufferQueue::NUM_BLIT_BUFFER_SLOTS];
+    sp<GraphicBuffer> mBlitSlots[NUM_BLIT_BUFFER_SLOTS];
     int mNextBlitSlot;
 #endif
 

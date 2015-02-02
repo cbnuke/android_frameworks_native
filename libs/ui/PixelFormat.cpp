@@ -88,26 +88,10 @@ status_t getPixelFormatInfo(PixelFormat format, PixelFormatInfo* info)
     switch (format) {
     case HAL_PIXEL_FORMAT_YCbCr_422_SP:
     case HAL_PIXEL_FORMAT_YCbCr_422_I:
-#ifdef STE_HARDWARE
-    case HAL_PIXEL_FORMAT_YCrCb_422_SP:
-    case HAL_PIXEL_FORMAT_YCbCr_422_P:
-    case HAL_PIXEL_FORMAT_YCrCb_422_P:
-    case HAL_PIXEL_FORMAT_CbYCrY_422_I:
-#endif
         info->bitsPerPixel = 16;
         goto done;
     case HAL_PIXEL_FORMAT_YCrCb_420_SP:
     case HAL_PIXEL_FORMAT_YV12:
-#ifdef STE_HARDWARE
-    case HAL_PIXEL_FORMAT_YCbCr_420_SP:
-    case HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED:
-    case HAL_PIXEL_FORMAT_YCrCb_420_SP_TILED:
-    case HAL_PIXEL_FORMAT_YCbCr_420_P:
-    case HAL_PIXEL_FORMAT_YCrCb_420_P:
-    case HAL_PIXEL_FORMAT_YCbCr_420_I:
-    case HAL_PIXEL_FORMAT_CbYCrY_420_I:
-    case HAL_PIXEL_FORMAT_YCBCR42XMBN:
-#endif
         info->bitsPerPixel = 12;
      done:
         info->format = format;
@@ -158,6 +142,12 @@ ssize_t bytesPerPixel(PixelFormat format) {
         case PIXEL_FORMAT_RGBA_5551:
         case PIXEL_FORMAT_RGBA_4444:
             return 2;
+#ifdef STE_HARDWARE
+        case PIXEL_FORMAT_YCbCr_420_SP:
+        case PIXEL_FORMAT_YCbCr_420_P:
+        case PIXEL_FORMAT_YCBCR42XMBN:
+            return 1;
+#endif
     }
     return BAD_VALUE;
 }
@@ -174,6 +164,12 @@ ssize_t bitsPerPixel(PixelFormat format) {
         case PIXEL_FORMAT_RGBA_5551:
         case PIXEL_FORMAT_RGBA_4444:
             return 16;
+#ifdef STE_HARDWARE
+        case PIXEL_FORMAT_YCbCr_420_SP:
+        case PIXEL_FORMAT_YCbCr_420_P:
+        case PIXEL_FORMAT_YCBCR42XMBN:
+            return 12;
+#endif
     }
     return BAD_VALUE;
 }

@@ -405,7 +405,8 @@ bool GLConsumer::stillTracking(int slot,
     //
     // While going to work this should fix random reboots,
     // because stillTracking method will operate as it should.
-    return ((mSlots[slot].mGraphicBuffer != NULL && mSlots[slot].mGraphicBuffer->handle == graphicBuffer->handle) ||
+    return ((mSlots[slot].mGraphicBuffer != NULL && 
+             mSlots[slot].mGraphicBuffer->handle == graphicBuffer->handle) ||
             (mBlitSlots[0] != NULL && mBlitSlots[0]->handle == graphicBuffer->handle) ||
             (mBlitSlots[1] != NULL && mBlitSlots[1]->handle == graphicBuffer->handle));
 }
@@ -435,8 +436,7 @@ status_t GLConsumer::updateAndReleaseLocked(const BufferQueue::BufferItem& item)
 
 #ifdef STE_HARDWARE
     sp<GraphicBuffer> textureBuffer;
-    if (mSlots[buf].mGraphicBuffer->getPixelFormat() == HAL_PIXEL_FORMAT_YCBCR42XMBN
-     || mSlots[buf].mGraphicBuffer->getPixelFormat() == HAL_PIXEL_FORMAT_YCbCr_420_P) {
+    if (conversionIsNeeded(mSlots[buf].mGraphicBuffer)) {
         /* test if source and convert buffer size are ok */
         if (mSlots[buf].mGraphicBuffer != NULL && mBlitSlots[mNextBlitSlot] != NULL) {
             sp<GraphicBuffer> srcBuf = mSlots[buf].mGraphicBuffer;
@@ -470,13 +470,13 @@ status_t GLConsumer::updateAndReleaseLocked(const BufferQueue::BufferItem& item)
             return UNKNOWN_ERROR;
         }
         textureBuffer = mBlitSlots[mNextBlitSlot];
-        mNextBlitSlot = (mNextBlitSlot + 1) % BufferQueue::NUM_BLIT_BUFFER_SLOTS;
+        mNextBlitSlot = (mNextBlitSlot + 1) % NUM_BLIT_BUFFER_SLOTS;
+        
+        // Set EglImage to use the new textureBuffer
+        mEglSlots[buf].mEglImage->setGraphicBuffer(textureBuffer);
     } else {
         textureBuffer = mSlots[buf].mGraphicBuffer;
     }
-
-    // Set EglImage to use the new textureBuffer
-    mEglSlots[buf].mEglImage->setGraphicBuffer(textureBuffer);
 #endif
 
     // Ensure we have a valid EglImageKHR for the slot, creating an EglImage
@@ -484,13 +484,7 @@ status_t GLConsumer::updateAndReleaseLocked(const BufferQueue::BufferItem& item)
     // ConsumerBase.
     // We may have to do this even when item.mGraphicBuffer == NULL (which
     // means the buffer was previously acquired).
-#ifdef STE_HARDWARE
-    // Force EglImage to destroy old eglImage and create a new one
-    // using textureBuffer.
-    err = mEglSlots[buf].mEglImage->createIfNeeded(mEglDisplay, item.mCrop, true);
-#else
     err = mEglSlots[buf].mEglImage->createIfNeeded(mEglDisplay, item.mCrop);
-#endif
     if (err != NO_ERROR) {
         ST_LOGW("updateAndRelease: unable to createImage on display=%p slot=%d",
                 mEglDisplay, buf);
@@ -1148,6 +1142,11 @@ void GLConsumer::dumpLocked(String8& result, const char* prefix) const
 }
 
 #ifdef STE_HARDWARE
+    bool GLConsumer::conversionIsNeeded(const sp<GraphicBuffer>& graphicBuffer) {
+    int fmt = graphicBuffer->getPixelFormat();
+    return (fmt == PIXEL_FORMAT_YCBCR42XMBN) || (fmt == PIXEL_FORMAT_YCbCr_420_P);
+}
+
 status_t GLConsumer::convert(sp<GraphicBuffer> &srcBuf, sp<GraphicBuffer> &dstBuf) {
     copybit_image_t dstImg;
     dstImg.w = dstBuf->getWidth();

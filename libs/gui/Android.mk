@@ -56,9 +56,7 @@ ifeq ($(BOARD_USE_MHEAP_SCREENSHOT),true)
 endif
 
 ifeq ($(BOARD_USES_STE_HARDWARE), true)
-LOCAL_SHARED_LIBRARIES += \
-	libhardware \
-	libhardware_legacy
+    LOCAL_SHARED_LIBRARIES += libhardware
 endif
 
 LOCAL_MODULE:= libgui

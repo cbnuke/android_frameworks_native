@@ -154,7 +154,7 @@ GLConsumer::GLConsumer(const sp<IGraphicBufferConsumer>& bq, uint32_t tex,
     sp<ISurfaceComposer> composer(ComposerService::getComposerService());
     mGraphicBufferAlloc = composer->createGraphicBufferAlloc();
     if (mGraphicBufferAlloc == 0) {
-        ST_LOGE("createGraphicBufferAlloc() failed in SurfaceTexture()");
+        ST_LOGE("createGraphicBufferAlloc() failed in GLConsumer()");
     }
 #endif
 
@@ -437,6 +437,12 @@ status_t GLConsumer::updateAndReleaseLocked(const BufferQueue::BufferItem& item)
 #ifdef STE_HARDWARE
     sp<GraphicBuffer> textureBuffer;
     if (conversionIsNeeded(mSlots[buf].mGraphicBuffer)) {
+		// If color conversion is needed we can't use the EglImage
+        // located in mEglSlots due to wrong color format. Instead
+        // destroy the image and let a new one be allocated with
+        // correct color format.
+        mEglSlots[buf].mEglImage.clear();
+
         /* test if source and convert buffer size are ok */
         if (mSlots[buf].mGraphicBuffer != NULL && mBlitSlots[mNextBlitSlot] != NULL) {
             sp<GraphicBuffer> srcBuf = mSlots[buf].mGraphicBuffer;
@@ -472,8 +478,8 @@ status_t GLConsumer::updateAndReleaseLocked(const BufferQueue::BufferItem& item)
         textureBuffer = mBlitSlots[mNextBlitSlot];
         mNextBlitSlot = (mNextBlitSlot + 1) % NUM_BLIT_BUFFER_SLOTS;
         
-        // Set EglImage to use the new textureBuffer
-        mEglSlots[buf].mEglImage->setGraphicBuffer(textureBuffer);
+        // Create new EglImage with the converted buffer
+        mEglSlots[buf].mEglImage = new EglImage(textureBuffer);
     } else {
         textureBuffer = mSlots[buf].mGraphicBuffer;
     }

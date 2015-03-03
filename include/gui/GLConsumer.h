@@ -322,11 +322,6 @@ private:
         const native_handle* graphicBufferHandle() {
             return mGraphicBuffer == NULL ? NULL : mGraphicBuffer->handle;
         }
-#ifdef STE_HARDWARE
-        void setGraphicBuffer(sp<GraphicBuffer> graphicBuffer) {
-            mGraphicBuffer = graphicBuffer;
-        }
-#endif
 
     private:
         // Only allow instantiation using ref counting.
@@ -515,10 +510,13 @@ private:
     // allocate new GraphicBuffer objects.
     sp<IGraphicBufferAlloc> mGraphicBufferAlloc;
 
-    // mBlitSlots stores the buffers that have been allocated int the case
-    // of color transform. It is initialised to null pointer,s and gets
+    // mBlitSlots stores the buffers that have been allocated in case
+    // of color transform. It is initialised to null pointer, and gets
     // filled in with the result of GLConsumer::updateAndReleaseLocked
     sp<GraphicBuffer> mBlitSlots[NUM_BLIT_BUFFER_SLOTS];
+    
+    // mNextBlitSlot is the index of the blitter buffer (in mBlitSlots) which
+    // will be used in the next color transform.
     int mNextBlitSlot;
 #endif
 

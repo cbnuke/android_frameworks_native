@@ -59,6 +59,10 @@ ifeq ($(BOARD_EGL_SKIP_FIRST_DEQUEUE),true)
     LOCAL_CFLAGS += -DSURFACE_SKIP_FIRST_DEQUEUE
 endif
 
+ifeq ($(BOARD_USES_STE_HARDWARE), true)
+    LOCAL_SHARED_LIBRARIES += libhardware
+endif
+
 LOCAL_MODULE:= libgui
 
 ifeq ($(TARGET_BOARD_PLATFORM), tegra)

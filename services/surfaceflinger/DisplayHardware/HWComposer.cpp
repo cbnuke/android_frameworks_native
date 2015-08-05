@@ -929,6 +929,19 @@ status_t HWComposer::prepare() {
                     if (l.compositionType == HWC_OVERLAY) {
                         disp.hasOvComp = true;
                     }
+                    if (l.compositionType == HWC_CURSOR_OVERLAY) {
+                        disp.hasOvComp = true;
+                    }
+#ifdef QCOM_BSP
+                    //GPUTILERECT
+                    if(l.compositionType != HWC_FRAMEBUFFER_TARGET &&
+                            disp.list->numHwLayers < MAX_LAYER_COUNT) {
+                        current_comp_map[i].compType[j] = l.compositionType;
+                    }
+#endif
+                }
+                if (disp.list->numHwLayers == (disp.framebufferTarget ? 1 : 0)) {
+                    disp.hasFbComp = true;
                 }
             }
         }
